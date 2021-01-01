@@ -14,10 +14,10 @@ void main() async {
   Box box = await Hive.openBox('routine');
 
   Mood mood = new Mood(mood: 7, title: 'A sample title');
-  RoutineItem item = RoutineItem(item: 'Something');
-  RoutineItem item1 = RoutineItem(item: 'Something1');
-  RoutineItem item2 = RoutineItem(item: 'Something2');
-  RoutineItem item3 = RoutineItem(item: 'Something3');
+  RoutineItem item = RoutineItem(item: 'Something1');
+  RoutineItem item1 = RoutineItem(item: 'Something2');
+  RoutineItem item2 = RoutineItem(item: 'Something3');
+  RoutineItem item3 = RoutineItem(item: 'Something4');
 
   String date = '2020-12-31';
 
@@ -34,10 +34,10 @@ void main() async {
   Routine routine = Routine(routines: list);
   // print(routine.routines);
   // box.put(date, routine);
-  print(box.length);
-  // Routine r = box.get(date);
-  // List<RoutineItem> routineList = r.routines;
-  // routineList.forEach((e) {
-  //   print(e.item);
-  // });
+  // print(box.length);
+  Routine r = box.get(date);
+  List<RoutineItem> routineList = r.routines;
+  routineList.forEach((e) {
+    print(e.item);
+  });
 }
