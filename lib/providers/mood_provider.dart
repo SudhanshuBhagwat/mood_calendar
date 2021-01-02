@@ -10,12 +10,18 @@ class MoodProvider with ChangeNotifier {
   int _moodEnum;
   Mood _mood;
   bool _isEdit = false;
+  Animation<double> _animation;
 
+  Animation<double> get animation => _animation;
   bool get isEdit => _isEdit;
   String get date => _date;
   String get title => _title;
   Mood get mood => _mood;
   int get moodEnum => _moodEnum;
+
+  set animation(Animation<double> ani) {
+    this._animation = ani;
+  }
 
   set isEdit(bool edit) {
     this._isEdit = edit;

@@ -62,8 +62,12 @@ class _CalendarWidgetState extends State<CalendarWidget> {
               onDayLongPressed: (day, events, holidays) {
                 provider.date = day.parseDateToString();
                 Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => CreateMoodScreen(),
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) {
+                      provider.animation = animation;
+                      return CreateMoodScreen(animation: animation);
+                    },
+                    transitionDuration: const Duration(milliseconds: 300),
                   ),
                 );
               },
