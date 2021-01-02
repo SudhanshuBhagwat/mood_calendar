@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mood_calendar/providers/mood_provider.dart';
 import 'package:provider/provider.dart';
-import '../../stores/mood_colors.dart';
+
+import '../../../providers/mood_provider.dart';
+import '../../../stores/mood_colors.dart';
 
 import 'mood_widget.dart';
 

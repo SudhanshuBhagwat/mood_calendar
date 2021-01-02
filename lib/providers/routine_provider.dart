@@ -19,10 +19,17 @@ class RoutineProvider extends ChangeNotifier {
     _routineItems.add(item);
   }
 
+  Future<int> areRoutinesSet() async {
+    await Hive.openBox(BoxName);
+    Box box = Hive.box(BoxName);
+    return box.length;
+  }
+
   Future<Routine> getRoutineForDate(String date) async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
     Routine currenRoutine = box.get(date);
+    _routine = currenRoutine;
     await box.close();
     return currenRoutine;
   }
@@ -39,5 +46,30 @@ class RoutineProvider extends ChangeNotifier {
     Box box = Hive.box(BoxName);
     box.put(date, _routine);
     await box.close();
+  }
+
+  void addItemToRoutine(String date, RoutineItem routineItem) async {
+    _routine.routines.add(routineItem);
+    await Hive.openBox(BoxName);
+    Box box = Hive.box(BoxName);
+    box.put(date, _routine);
+    await box.close();
+  }
+
+  void updateRoutineItem(
+      String oldRoutineItemText, String newRoutineText) async {
+    _routine.routines.forEach((routineItem) {
+      if (routineItem.item == oldRoutineItemText) {
+        routineItem.item = newRoutineText;
+      }
+    });
+  }
+
+  void toggleRoutineItem(String routineText) async {
+    _routine.routines.forEach((routineItem) {
+      if (routineItem.item == routineText) {
+        routineItem.isCompleted = !routineItem.isCompleted;
+      }
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mood_calendar/models/mood.dart';
 import 'package:mood_calendar/providers/mood_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class CreateMoodAppBar extends StatelessWidget {
               icon: Icon(Icons.arrow_back_ios),
               color: Colors.white,
               onPressed: () {
+                context.read<MoodProvider>().isEdit = false;
                 Navigator.of(context).pop();
               },
             ),

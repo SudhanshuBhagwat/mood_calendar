@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import '../../stores/mood_colors.dart';
+import '../../../stores/mood_colors.dart';
 
 class Mood extends StatelessWidget {
   final MOOD mood;

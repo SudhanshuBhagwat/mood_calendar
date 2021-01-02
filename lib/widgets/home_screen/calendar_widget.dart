@@ -63,9 +63,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 provider.date = day.parseDateToString();
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => CreateMoodScreen(
-                      day: day,
-                    ),
+                    builder: (context) => CreateMoodScreen(),
                   ),
                 );
               },
