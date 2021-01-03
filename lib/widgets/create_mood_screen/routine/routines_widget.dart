@@ -6,9 +6,26 @@ import '../../../providers/mood_provider.dart';
 
 class RoutinesWidget extends StatelessWidget {
   final items = [
-    {'text': 'Hello World', 'isCompleted': true},
+    {'text': 'Hello World', 'isCompleted': false},
     {'text': 'A sample check item', 'isCompleted': true},
   ];
+
+  Widget addItem(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.all(6.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.grey[300],
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Icon(
+        Icons.add,
+        size: 34.0,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +33,19 @@ class RoutinesWidget extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Current Routines',
                 style: TextStyle(fontSize: 24.0),
+              ),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.calendar_today),
+                iconSize: 34.0,
+                onPressed: () {},
+              ),
+              SizedBox(
+                width: 16.0,
               ),
               GestureDetector(
                 onTap: () {
@@ -36,7 +61,7 @@ class RoutinesWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Text(
-                    'Back',
+                    'Save',
                     style: TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -47,9 +72,11 @@ class RoutinesWidget extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(height: 10.0),
           Expanded(
             child: ListView.builder(
               itemCount: 2,
+              physics: BouncingScrollPhysics(),
               itemBuilder: (BuildContext context, int index) {
                 var item = items[index];
                 return RoutineItemWidget(
@@ -60,6 +87,7 @@ class RoutinesWidget extends StatelessWidget {
               },
             ),
           ),
+          addItem(context),
         ],
       ),
     );

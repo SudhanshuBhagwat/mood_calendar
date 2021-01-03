@@ -83,11 +83,7 @@ class CreateMoodScreen extends StatelessWidget {
                   topRight: Radius.circular(_borderRadius),
                 ),
               ),
-              padding: const EdgeInsets.only(
-                left: 30.0,
-                right: 30.0,
-                top: 30.0,
-              ),
+              padding: const EdgeInsets.all(30.0),
               child: child,
             ),
           ),
