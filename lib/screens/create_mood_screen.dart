@@ -28,67 +28,69 @@ class CreateMoodScreen extends StatelessWidget {
     BuildContext context,
   ) {
     String text = isEdit ? 'Create/Edit Routines' : getDate(dateTime);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(
-            left: 30.0,
-            right: 30.0,
-            top: 20.0,
-            bottom: 30.0,
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(
+              left: 30.0,
+              right: 30.0,
+              top: 20.0,
+              bottom: 30.0,
+            ),
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(0.1, 0),
+                    end: Offset(0, 0),
+                  ).animate(animation),
+                  child: FadeTransition(
+                    opacity: animation,
+                    child: child,
+                  ),
+                );
+              },
+              child: Text(
+                '$text',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
-          child: AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0.1, 0),
-                  end: Offset(0, 0),
-                ).animate(animation),
-                child: FadeTransition(
-                  opacity: animation,
+          Expanded(
+            child: AnimatedBuilder(
+              animation: animation,
+              builder: (context, child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(0, 1),
+                    end: Offset(0, 0),
+                  ).animate(animation),
                   child: child,
+                );
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(_borderRadius),
+                    topRight: Radius.circular(_borderRadius),
+                  ),
                 ),
-              );
-            },
-            child: Text(
-              '$text',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-        Expanded(
-          child: AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return SlideTransition(
-                position: Tween<Offset>(
-                  begin: Offset(0, 1),
-                  end: Offset(0, 0),
-                ).animate(animation),
+                padding: const EdgeInsets.all(30.0),
                 child: child,
-              );
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(_borderRadius),
-                  topRight: Radius.circular(_borderRadius),
-                ),
               ),
-              padding: const EdgeInsets.all(30.0),
-              child: child,
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

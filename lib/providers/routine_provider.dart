@@ -15,8 +15,15 @@ class RoutineProvider extends ChangeNotifier {
     this._routine = currentRoutine;
   }
 
+  void toggleRoutineItemAtIndex(int index, bool value) {
+    _routineItems.elementAt(index).isCompleted = value;
+    notifyListeners();
+  }
+
   void addRoutineItems(RoutineItem item) {
     _routineItems.add(item);
+    print(_routineItems.length);
+    notifyListeners();
   }
 
   Future<int> areRoutinesSet() async {
@@ -25,51 +32,31 @@ class RoutineProvider extends ChangeNotifier {
     return box.length;
   }
 
-  Future<Routine> getRoutineForDate(String date) async {
+  void getRoutineForDate(String date) async {
+    print('He');
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
     Routine currenRoutine = box.get(date);
-    _routine = currenRoutine;
+    if (currenRoutine == null) {
+      _routine = Routine();
+      _routineItems.clear();
+    } else {
+      _routine = currenRoutine;
+      _routineItems = currenRoutine.routines;
+    }
     await box.close();
-    return currenRoutine;
   }
 
   void addRoutine(String date) async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
+    _routine = Routine(routines: _routineItems);
     box.put(date, _routine);
     await box.close();
   }
 
-  void updateRoutine(String date) async {
-    await Hive.openBox(BoxName);
-    Box box = Hive.box(BoxName);
-    box.put(date, _routine);
-    await box.close();
-  }
-
-  void addItemToRoutine(String date, RoutineItem routineItem) async {
-    _routine.routines.add(routineItem);
-    await Hive.openBox(BoxName);
-    Box box = Hive.box(BoxName);
-    box.put(date, _routine);
-    await box.close();
-  }
-
-  void updateRoutineItem(
-      String oldRoutineItemText, String newRoutineText) async {
-    _routine.routines.forEach((routineItem) {
-      if (routineItem.item == oldRoutineItemText) {
-        routineItem.item = newRoutineText;
-      }
-    });
-  }
-
-  void toggleRoutineItem(String routineText) async {
-    _routine.routines.forEach((routineItem) {
-      if (routineItem.item == routineText) {
-        routineItem.isCompleted = !routineItem.isCompleted;
-      }
-    });
+  void removeItem(int index) {
+    _routineItems.removeAt(index);
+    notifyListeners();
   }
 }

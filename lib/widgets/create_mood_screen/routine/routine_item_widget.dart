@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/routine_provider.dart';
 
 class RoutineItemWidget extends StatelessWidget {
   final String text;
   final bool isChecked;
-  final Key key;
+  final UniqueKey key;
+  final int index;
 
-  RoutineItemWidget({this.text, this.isChecked, this.key});
+  RoutineItemWidget({this.text, this.isChecked, this.key, this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +17,9 @@ class RoutineItemWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10.0),
       child: Dismissible(
         key: key,
+        onDismissed: (DismissDirection direction) {
+          context.read<RoutineProvider>().removeItem(index);
+        },
         background: Container(
           decoration: BoxDecoration(
             color: Colors.red[400],
@@ -33,7 +40,11 @@ class RoutineItemWidget extends StatelessWidget {
                 scale: 1.2,
                 child: Checkbox(
                   value: isChecked,
-                  onChanged: (value) {},
+                  onChanged: (value) {
+                    context
+                        .read<RoutineProvider>()
+                        .toggleRoutineItemAtIndex(index, value);
+                  },
                 ),
               ),
               SizedBox(

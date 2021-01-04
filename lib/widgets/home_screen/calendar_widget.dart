@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:mood_calendar/providers/routine_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../providers/mood_provider.dart';
@@ -64,7 +65,9 @@ class _CalendarWidgetState extends State<CalendarWidget> {
                 Navigator.of(context).push(
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) {
-                      provider.animation = animation;
+                      context
+                          .watch<RoutineProvider>()
+                          .getRoutineForDate(provider.date);
                       return CreateMoodScreen(animation: animation);
                     },
                     transitionDuration: const Duration(milliseconds: 300),
