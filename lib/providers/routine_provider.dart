@@ -33,7 +33,6 @@ class RoutineProvider extends ChangeNotifier {
   }
 
   void getRoutineForDate(String date) async {
-    print('He');
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
     Routine currenRoutine = box.get(date);

@@ -7,14 +7,8 @@ import '../routine/routine_item_widget.dart';
 import '../../../providers/mood_provider.dart';
 
 class RoutinesWidget extends StatelessWidget {
-  final items = [
-    {'text': 'Hello World', 'isCompleted': false},
-    {'text': 'A sample check item', 'isCompleted': true},
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final tasks = Provider.of<RoutineProvider>(context).routineItems;
     return Column(
       children: [
         Row(
@@ -34,8 +28,8 @@ class RoutinesWidget extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                var date = context.read<MoodProvider>().date;
-                context.read<RoutineProvider>().addRoutine(date);
+                // var date = context.read<MoodProvider>().date;
+                // context.read<RoutineProvider>().addRoutine(date);
                 context.read<MoodProvider>().toggleEdit();
               },
               child: Container(
@@ -61,19 +55,22 @@ class RoutinesWidget extends StatelessWidget {
         ),
         SizedBox(height: 10.0),
         Expanded(
-          child: ListView.builder(
-            itemCount: tasks.length,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (BuildContext context, int index) {
-              var item = tasks[index];
-              return RoutineItemWidget(
-                isChecked: item.isCompleted,
-                text: item.item,
-                key: UniqueKey(),
-                index: index,
-              );
-            },
-          ),
+          child: Consumer<RoutineProvider>(builder: (context, provider, child) {
+            var routineItems = provider.routineItems;
+            return ListView.builder(
+              itemCount: routineItems.length,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                var item = routineItems[index];
+                return RoutineItemWidget(
+                  isChecked: item.isCompleted,
+                  text: item.item,
+                  key: UniqueKey(),
+                  index: index,
+                );
+              },
+            );
+          }),
         ),
         AddRoutineTask(),
       ],

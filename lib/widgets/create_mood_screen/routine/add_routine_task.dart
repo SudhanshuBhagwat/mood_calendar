@@ -11,17 +11,12 @@ class AddRoutineTask extends StatefulWidget {
 
 class _AddRoutineTaskState extends State<AddRoutineTask>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
   TextEditingController _textEditingController;
 
   @override
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(seconds: 1),
-    );
   }
 
   @override

@@ -46,60 +46,60 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   Widget build(BuildContext context) {
     final provider = Provider.of<MoodProvider>(context);
     return ValueListenableBuilder(
-        valueListenable: Hive.box('calendar').listenable(),
-        builder: (context, box, widget) {
-          return RepaintBoundary(
-            child: TableCalendar(
-              calendarController: _calendarController,
-              headerStyle: HeaderStyle(
-                leftChevronVisible: false,
-                rightChevronVisible: false,
-                formatButtonVisible: false,
-                headerMargin: const EdgeInsets.only(bottom: 30.0, left: 30.0),
-                titleTextStyle:
-                    TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
-              ),
-              availableGestures: AvailableGestures.horizontalSwipe,
-              onDayLongPressed: (day, events, holidays) {
-                provider.date = day.parseDateToString();
-                Navigator.of(context).push(
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) {
-                      context
-                          .watch<RoutineProvider>()
-                          .getRoutineForDate(provider.date);
-                      return CreateMoodScreen(animation: animation);
-                    },
-                    transitionDuration: const Duration(milliseconds: 300),
-                  ),
-                );
-              },
-              builders: CalendarBuilders(
-                dowWeekdayBuilder: (context, weekday) => Container(
-                  margin: const EdgeInsets.only(bottom: 20.0),
-                  child: Center(
-                    child: Text(
-                      weekday.substring(0, 1),
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w600,
-                      ),
+      valueListenable: Hive.box('calendar').listenable(),
+      builder: (context, box, widget) {
+        return RepaintBoundary(
+          child: TableCalendar(
+            calendarController: _calendarController,
+            headerStyle: HeaderStyle(
+              leftChevronVisible: false,
+              rightChevronVisible: false,
+              formatButtonVisible: false,
+              headerMargin: const EdgeInsets.only(bottom: 30.0, left: 30.0),
+              titleTextStyle:
+                  TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+            ),
+            availableGestures: AvailableGestures.horizontalSwipe,
+            onDayLongPressed: (day, events, holidays) {
+              String date = day.parseDateToString();
+              provider.date = date;
+              context.read<RoutineProvider>().getRoutineForDate(provider.date);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return CreateMoodScreen(animation: animation, date: date);
+                  },
+                  transitionDuration: const Duration(milliseconds: 300),
+                ),
+              );
+            },
+            builders: CalendarBuilders(
+              dowWeekdayBuilder: (context, weekday) => Container(
+                margin: const EdgeInsets.only(bottom: 20.0),
+                child: Center(
+                  child: Text(
+                    weekday.substring(0, 1),
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                todayDayBuilder: (context, date, events) {
-                  bool isExtra =
-                      _isExtraDay(date, _calendarController.focusedDay);
-                  return DayWidget(date, isToday: true, isOutsideDay: isExtra);
-                },
-                outsideDayBuilder: (context, date, events) =>
-                    DayWidget(date, isOutsideDay: true),
-                outsideWeekendDayBuilder: (context, date, events) =>
-                    DayWidget(date, isOutsideDay: true),
-                dayBuilder: (context, date, events) => DayWidget(date),
               ),
+              todayDayBuilder: (context, date, events) {
+                bool isExtra =
+                    _isExtraDay(date, _calendarController.focusedDay);
+                return DayWidget(date, isToday: true, isOutsideDay: isExtra);
+              },
+              outsideDayBuilder: (context, date, events) =>
+                  DayWidget(date, isOutsideDay: true),
+              outsideWeekendDayBuilder: (context, date, events) =>
+                  DayWidget(date, isOutsideDay: true),
+              dayBuilder: (context, date, events) => DayWidget(date),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 }
