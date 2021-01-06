@@ -15,14 +15,13 @@ class RoutineProvider extends ChangeNotifier {
     this._routine = currentRoutine;
   }
 
-  void toggleRoutineItemAtIndex(int index, bool value) {
-    _routineItems.elementAt(index).isCompleted = value;
-    notifyListeners();
-  }
-
-  void addRoutineItems(RoutineItem item) {
-    _routineItems.add(item);
-    print(_routineItems.length);
+  void toggleRoutineItemAtIndex(String date, int index, bool value) async {
+    await Hive.openBox(BoxName);
+    Box box = Hive.box(BoxName);
+    Routine currenRoutine = box.get(date);
+    currenRoutine.routines.elementAt(index).isCompleted = value;
+    box.put(date, currenRoutine);
+    await box.close();
     notifyListeners();
   }
 
@@ -32,30 +31,37 @@ class RoutineProvider extends ChangeNotifier {
     return box.length;
   }
 
-  void getRoutineForDate(String date) async {
+  Future<List<RoutineItem>> getRoutineForDate(String date) async {
+    await Hive.openBox(BoxName);
+    Box box = Hive.box(BoxName);
+    Routine currenRoutine = box.get(date);
+    return currenRoutine == null ? null : currenRoutine.routines;
+  }
+
+  void addRoutineToBox(String date, RoutineItem item) async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
     Routine currenRoutine = box.get(date);
     if (currenRoutine == null) {
-      _routine = Routine();
-      _routineItems.clear();
+      List<RoutineItem> _routineItems = List.empty(growable: true);
+      _routineItems.add(item);
+      currenRoutine = Routine(routines: _routineItems);
     } else {
-      _routine = currenRoutine;
-      _routineItems = currenRoutine.routines;
+      currenRoutine.routines.add(item);
     }
+    box.put(date, currenRoutine);
     await box.close();
+    notifyListeners();
   }
 
-  void addRoutine(String date) async {
+  void removeItem(String date, int index) async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
-    _routine = Routine(routines: _routineItems);
-    box.put(date, _routine);
+    Routine currenRoutine = box.get(date);
+    currenRoutine.routines.removeAt(index);
+    print(currenRoutine.routines.length);
+    box.put(date, currenRoutine);
     await box.close();
-  }
-
-  void removeItem(int index) {
-    _routineItems.removeAt(index);
     notifyListeners();
   }
 }

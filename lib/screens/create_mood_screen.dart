@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:mood_calendar/stores/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/mood_provider.dart';
@@ -14,13 +15,6 @@ class CreateMoodScreen extends StatelessWidget {
   final String date;
 
   CreateMoodScreen({this.animation, this.date});
-
-  String getDate(String dateTime) {
-    List<String> date = dateTime.split('-');
-    return Jiffy(
-      DateTime(int.parse(date[0]), int.parse(date[1]), int.parse(date[2])),
-    ).format('do MMMM y, EEEE');
-  }
 
   @override
   Widget build(BuildContext context) {

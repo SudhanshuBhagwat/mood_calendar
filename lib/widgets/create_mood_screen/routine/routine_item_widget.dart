@@ -8,8 +8,15 @@ class RoutineItemWidget extends StatelessWidget {
   final bool isChecked;
   final UniqueKey key;
   final int index;
+  final String date;
 
-  RoutineItemWidget({this.text, this.isChecked, this.key, this.index});
+  RoutineItemWidget({
+    this.text,
+    this.isChecked,
+    this.key,
+    this.index,
+    this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +25,7 @@ class RoutineItemWidget extends StatelessWidget {
       child: Dismissible(
         key: key,
         onDismissed: (DismissDirection direction) {
-          context.read<RoutineProvider>().removeItem(index);
+          context.read<RoutineProvider>().removeItem(date, index);
         },
         background: Container(
           decoration: BoxDecoration(
@@ -41,9 +48,11 @@ class RoutineItemWidget extends StatelessWidget {
                 child: Checkbox(
                   value: isChecked,
                   onChanged: (value) {
-                    context
-                        .read<RoutineProvider>()
-                        .toggleRoutineItemAtIndex(index, value);
+                    context.read<RoutineProvider>().toggleRoutineItemAtIndex(
+                          date,
+                          index,
+                          value,
+                        );
                   },
                 ),
               ),

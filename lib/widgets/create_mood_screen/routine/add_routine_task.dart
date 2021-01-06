@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../extensions/date_extension.dart';
+import '../../../providers/mood_provider.dart';
 import '../../../models/routine_item.dart';
 import '../../../providers/routine_provider.dart';
 
@@ -17,6 +19,12 @@ class _AddRoutineTaskState extends State<AddRoutineTask>
   void initState() {
     super.initState();
     _textEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,12 +60,16 @@ class _AddRoutineTaskState extends State<AddRoutineTask>
           ),
           GestureDetector(
             onTap: () {
+              String date = context.read<MoodProvider>().date;
               if (_textEditingController.text != '') {
                 RoutineItem routineItem = RoutineItem(
                   isCompleted: false,
                   item: _textEditingController.text,
                 );
-                context.read<RoutineProvider>().addRoutineItems(routineItem);
+                context.read<RoutineProvider>().addRoutineToBox(
+                      date,
+                      routineItem,
+                    );
                 _textEditingController.clear();
               }
             },
