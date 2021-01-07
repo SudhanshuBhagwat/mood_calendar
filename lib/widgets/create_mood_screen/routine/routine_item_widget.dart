@@ -25,7 +25,7 @@ class RoutineItemWidget extends StatelessWidget {
       child: Dismissible(
         key: key,
         onDismissed: (DismissDirection direction) {
-          context.read<RoutineProvider>().removeItem(date, index);
+          context.read<RoutineProvider>().removeRoutineItem(date, index);
         },
         background: Container(
           decoration: BoxDecoration(
@@ -48,7 +48,7 @@ class RoutineItemWidget extends StatelessWidget {
                 child: Checkbox(
                   value: isChecked,
                   onChanged: (value) {
-                    context.read<RoutineProvider>().toggleRoutineItemAtIndex(
+                    context.read<RoutineProvider>().toggleRoutineItem(
                           date,
                           index,
                           value,

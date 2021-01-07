@@ -50,7 +50,10 @@ class MoodProvider with ChangeNotifier {
 
   void saveMood() {
     Box box = Hive.box(BoxName);
-    _mood = new Mood(mood: _moodEnum, title: _title);
+    _mood = new Mood(
+      mood: _moodEnum == null ? MOOD.NONE.index : _moodEnum,
+      title: _title == null ? '' : _title,
+    );
     box.put(date, _mood);
     notifyListeners();
   }

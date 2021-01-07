@@ -8,5 +8,8 @@ class Routine {
   @HiveField(0)
   List<RoutineItem> routines;
 
-  Routine({this.routines});
+  @HiveField(1)
+  String date;
+
+  Routine({this.routines, this.date});
 }

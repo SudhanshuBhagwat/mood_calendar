@@ -15,16 +15,6 @@ class RoutineProvider extends ChangeNotifier {
     this._routine = currentRoutine;
   }
 
-  void toggleRoutineItemAtIndex(String date, int index, bool value) async {
-    await Hive.openBox(BoxName);
-    Box box = Hive.box(BoxName);
-    Routine currenRoutine = box.get(date);
-    currenRoutine.routines.elementAt(index).isCompleted = value;
-    box.put(date, currenRoutine);
-    await box.close();
-    notifyListeners();
-  }
-
   Future<int> areRoutinesSet() async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
@@ -32,36 +22,68 @@ class RoutineProvider extends ChangeNotifier {
   }
 
   Future<List<RoutineItem>> getRoutineForDate(String date) async {
-    await Hive.openBox(BoxName);
-    Box box = Hive.box(BoxName);
-    Routine currenRoutine = box.get(date);
-    return currenRoutine == null ? null : currenRoutine.routines;
-  }
-
-  void addRoutineToBox(String date, RoutineItem item) async {
+    if (_routine != null &&
+        _routine.date == date &&
+        _routine.routines.length > 0) {
+      return Future<List<RoutineItem>>.value(_routine.routines);
+    }
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
     Routine currenRoutine = box.get(date);
     if (currenRoutine == null) {
       List<RoutineItem> _routineItems = List.empty(growable: true);
-      _routineItems.add(item);
-      currenRoutine = Routine(routines: _routineItems);
+      _routine = Routine(date: date, routines: _routineItems);
+      return Future<List<RoutineItem>>.value(_routine.routines);
     } else {
-      currenRoutine.routines.add(item);
+      _routine = currenRoutine;
     }
-    box.put(date, currenRoutine);
-    await box.close();
+    // await box.close();
+    return _routine.routines;
+  }
+
+  void addNewRoutineItem(String date, RoutineItem item) {
+    if (_routine != null && _routine.date == date) {
+      if (_routine.routines != null) {
+        _routine.routines.add(item);
+      } else {
+        List<RoutineItem> _routineItems = List.empty(growable: true);
+        _routineItems.add(item);
+        _routine = Routine(date: date, routines: _routineItems);
+      }
+    } else {
+      List<RoutineItem> _routineItems = List.empty(growable: true);
+      _routine = Routine(date: date, routines: _routineItems);
+    }
     notifyListeners();
   }
 
-  void removeItem(String date, int index) async {
+  void removeRoutineItem(String date, int index) {
+    if (_routine != null && _routine.date == date) {
+      if (_routine.routines.length > 0) {
+        _routine.routines.removeAt(index);
+      }
+    }
+    notifyListeners();
+  }
+
+  void toggleRoutineItem(String date, int index, bool value) {
+    if (_routine != null && _routine.date == date) {
+      if (_routine.routines.length > 0) {
+        _routine.routines[index].isCompleted = value;
+      }
+    }
+    notifyListeners();
+  }
+
+  void saveRoutineToBox(String date) async {
     await Hive.openBox(BoxName);
     Box box = Hive.box(BoxName);
-    Routine currenRoutine = box.get(date);
-    currenRoutine.routines.removeAt(index);
-    print(currenRoutine.routines.length);
-    box.put(date, currenRoutine);
+    box.put(date, _routine);
     await box.close();
+  }
+
+  void resetRoutine(String date) async {
+    _routine = null;
     notifyListeners();
   }
 }

@@ -66,7 +66,7 @@ class _AddRoutineTaskState extends State<AddRoutineTask>
                   isCompleted: false,
                   item: _textEditingController.text,
                 );
-                context.read<RoutineProvider>().addRoutineToBox(
+                context.read<RoutineProvider>().addNewRoutineItem(
                       date,
                       routineItem,
                     );

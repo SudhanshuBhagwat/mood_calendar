@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mood_calendar/models/mood.dart';
 import 'package:mood_calendar/providers/mood_provider.dart';
+import 'package:mood_calendar/providers/routine_provider.dart';
 import 'package:provider/provider.dart';
 
 class CreateMoodAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var moodProvider = context.watch<MoodProvider>();
+    var routineProvider = context.watch<RoutineProvider>();
     return SafeArea(
       child: Container(
         margin: const EdgeInsets.only(top: 10.0),
@@ -19,7 +22,8 @@ class CreateMoodAppBar extends StatelessWidget {
               icon: Icon(Icons.arrow_back_ios),
               color: Colors.white,
               onPressed: () {
-                context.read<MoodProvider>().isEdit = false;
+                moodProvider.isEdit = false;
+                routineProvider.resetRoutine(moodProvider.date);
                 Navigator.of(context).pop();
               },
             ),
@@ -29,7 +33,10 @@ class CreateMoodAppBar extends StatelessWidget {
               icon: Icon(Icons.check),
               color: Colors.white,
               onPressed: () {
-                context.read<MoodProvider>().saveMood();
+                moodProvider.saveMood();
+                routineProvider.saveRoutineToBox(
+                  moodProvider.date,
+                );
                 Navigator.of(context).pop();
               },
             )

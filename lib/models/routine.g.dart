@@ -18,15 +18,18 @@ class RoutineAdapter extends TypeAdapter<Routine> {
     };
     return Routine(
       routines: (fields[0] as List)?.cast<RoutineItem>(),
+      date: fields[1] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Routine obj) {
     writer
-      ..writeByte(1)
+      ..writeByte(2)
       ..writeByte(0)
-      ..write(obj.routines);
+      ..write(obj.routines)
+      ..writeByte(1)
+      ..write(obj.date);
   }
 
   @override
